@@ -15,7 +15,7 @@ export class EncryptionService {
     key: Buffer
   ): Promise<{ iv: Buffer; authTag: Buffer }> {
     const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv(this.algorithm, key, iv);
+    const cipher = crypto.createCipheriv(this.algorithm, key, iv) as crypto.CipherGCM;
 
     const input = fs.createReadStream(inputPath);
     const output = fs.createWriteStream(outputPath);
@@ -40,7 +40,7 @@ export class EncryptionService {
     iv: Buffer,
     authTag: Buffer
   ): Promise<void> {
-    const decipher = crypto.createDecipheriv(this.algorithm, key, iv);
+    const decipher = crypto.createDecipheriv(this.algorithm, key, iv) as crypto.DecipherGCM;
     decipher.setAuthTag(authTag);
 
     const input = fs.createReadStream(inputPath);
